@@ -82,7 +82,7 @@ function jsonToHTML (params) {
 
     // Print selected properties only
     for (let n = 0; n < properties.length; n++) {
-      const dataEntry = data[i]
+      let dataEntry = data[i]
       let stringData = dataEntry[properties[n].field]
 
       // Support nested objects
@@ -90,8 +90,10 @@ function jsonToHTML (params) {
         let property = properties[n].field.split('.')
         if (property.length > 1) {
           for (let p = 0; p < property.length; p++) {
-            stringData = dataEntry[property[p]]
+            // Traverse down the object structure to the final value
+            dataEntry = dataEntry[property[p]]
           }
+          stringData = dataEntry
         }
       }
 
