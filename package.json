@@ -36,7 +36,7 @@
     "test": "standard && karma start",
     "dev": "webpack --mode development --progress --hide-modules --devtool source-map",
     "watch": "webpack --mode development --watch --progress --hide-modules",
-    "production": "webpack --mode production --progress --hide-modules",
+    "prepare": "webpack --mode production --progress --hide-modules",
     "coverage": "open coverage/lcov-report/index.html",
     "coveralls": "cat coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "start": "webpack-dev-server --public http://localhost:8080/test/manual --open"
