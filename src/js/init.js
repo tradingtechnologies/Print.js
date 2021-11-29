@@ -36,6 +36,7 @@ export default {
       targetStyles: ['border', 'box', 'break', 'text-decoration'],
       ignoreElements: [],
       repeatTableHeader: true,
+      expandNestedJsonObjects: true,
       css: null,
       style: null,
       scanStyles: true,
