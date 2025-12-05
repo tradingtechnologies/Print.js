@@ -41,6 +41,7 @@ export default {
       style: null,
       scanStyles: true,
       base64: false,
+      nonce: null,
 
       // Deprecated
       onPdfOpen: null,
@@ -104,10 +105,10 @@ export default {
       // Set the iframe to be is visible on the page (guaranteed by fixed position) but hidden using opacity 0, because
       // this works in Firefox. The height needs to be sufficient for some part of the document other than the PDF
       // viewer's toolbar to be visible in the page
-      printFrame.setAttribute('style', 'width: 1px; height: 100px; position: fixed; left: 0; top: 0; opacity: 0; border-width: 0; margin: 0; padding: 0')
+      printFrame.className = 'printjs-firefox-frame'
     } else {
       // Hide the iframe in other browsers
-      printFrame.setAttribute('style', 'visibility: hidden; height: 0; width: 0; position: absolute; border: 0')
+      printFrame.className = 'printjs-hidden-frame'
     }
 
     // Set iframe element id
@@ -116,6 +117,13 @@ export default {
     // For non pdf printing, pass an html document string to srcdoc (force onload callback)
     if (params.type !== 'pdf') {
       printFrame.srcdoc = '<html><head><title>' + params.documentTitle + '</title>'
+
+      // Add inline style with nonce if provided
+      if (params.nonce) {
+        printFrame.srcdoc += '<style nonce="' + params.nonce + '">'
+        printFrame.srcdoc += 'body { margin: 0; padding: 0; }'
+        printFrame.srcdoc += '</style>'
+      }
 
       // Attach css files
       if (params.css) {

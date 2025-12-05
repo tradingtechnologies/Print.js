@@ -34,6 +34,11 @@ const Print = {
         const style = document.createElement('style')
         style.innerHTML = params.style
 
+        // Add nonce attribute if provided
+        if (params.nonce) {
+          style.setAttribute('nonce', params.nonce)
+        }
+
         // Append style element to iframe's head
         printDocument.head.appendChild(style)
       }
