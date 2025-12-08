@@ -1,7 +1,7 @@
 const path = require('path')
 const TerserPlugin = require('terser-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = {
   mode: 'development',
@@ -14,7 +14,7 @@ module.exports = {
     libraryTarget: 'umd',
     path: path.resolve(__dirname, 'dist'),
     filename: 'print.js',
-    sourceMapFilename: 'print.map',
+    sourceMapFilename: 'print[ext].map',
     libraryExport: 'default'
   },
   module: {
@@ -26,16 +26,6 @@ module.exports = {
           loader: 'babel-loader'
         }
       },
-      // TODO: Configure istanbul to interpret how webpack bundles files
-      // {
-      //   test: /\.js$/,
-      //   use: {
-      //     loader: 'istanbul-instrumenter-loader',
-      //     options: { esModules: true }
-      //   },
-      //   enforce: 'post',
-      //   exclude: /node_modules|\.spec\.js$/
-      // },
       {
         test: /\.scss$/,
         use: [
@@ -68,9 +58,8 @@ module.exports = {
   ],
   optimization: {
     minimizer: [
-      new OptimizeCssAssetsPlugin({
-        assetNameRegExp: /\.css$/g,
-        canPrint: false
+      new CssMinimizerPlugin({
+        test: /\.css$/g
       }),
       new TerserPlugin({
         cache: false,
