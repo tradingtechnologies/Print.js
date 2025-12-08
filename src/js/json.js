@@ -48,8 +48,26 @@ function jsonToHTML (params) {
   const data = params.printable
   const properties = params.properties
 
-  // Create a html table
-  let htmlData = '<table style="border-collapse: collapse; width: 100%;">'
+  // Generate style element with nonce if provided
+  let styleId = 'printjs-json-styles'
+  let styleTag = params.nonce 
+    ? '<style nonce="' + params.nonce + '" id="' + styleId + '">'
+    : '<style id="' + styleId + '">'
+  
+  styleTag += `
+    .printjs-json-table { border-collapse: collapse; width: 100%; }
+    .printjs-json-th { ${params.gridHeaderStyle} }
+    .printjs-json-td { ${params.gridStyle} }
+  `
+
+  // Add individual column width styles
+  for (let a = 0; a < properties.length; a++) {
+    styleTag += `.printjs-json-col-${a} { width: ${properties[a].columnSize} }`
+  }
+  
+  styleTag += '</style>'
+
+  let htmlData = styleTag + '<table class="printjs-json-table">'
 
   // Check if the header should be repeated
   if (params.repeatTableHeader) {
@@ -61,7 +79,7 @@ function jsonToHTML (params) {
 
   // Add the table header columns
   for (let a = 0; a < properties.length; a++) {
-    htmlData += '<th style="width:' + properties[a].columnSize + ';' + params.gridHeaderStyle + '">' + capitalizePrint(properties[a].displayName) + '</th>'
+    htmlData += '<th class="printjs-json-th printjs-json-col-' + a + '">' + capitalizePrint(properties[a].displayName) + '</th>'
   }
 
   // Add the closing tag for the table header row
@@ -98,7 +116,7 @@ function jsonToHTML (params) {
       }
 
       // Add the row contents and styles
-      htmlData += '<td style="width:' + properties[n].columnSize + params.gridStyle + '">' + stringData + '</td>'
+      htmlData += '<td class="printjs-json-td printjs-json-col-' + n + '">' + stringData + '</td>'
     }
 
     // Add the row closing tag
